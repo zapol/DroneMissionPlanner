@@ -4,10 +4,19 @@
     <string name="app_name">Drone Mission Planner</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="action_pairBt">Pair Bluetooth</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="missions">Missions:</string>
     <string name="newMission">New Mission</string>
     <string name="tasks">Tasks:</string>
     <string name="newTask">New Task</string>
+    <string name="title_MissionsTasks">Missions&amp;Tasks</string>
+    <string name="title_Map">Map</string>
+    <string name="title_Control">Control</string>
+
+    <string name="tracking">Tracking:</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+
 
 </resources>

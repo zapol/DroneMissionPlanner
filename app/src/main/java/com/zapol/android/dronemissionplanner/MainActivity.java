@@ -51,7 +51,17 @@ public class MainActivity extends ActionBarActivity implements MissionsTasksFrag
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
+        getSupportActionBar().setTitle(mSectionsPagerAdapter.getPageTitle(0));
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener(){
+            @Override public void onPageScrollStateChanged(    int arg0){
+            }
+            @Override public void onPageScrolled(    int arg0,    float arg1,    int arg2){
+            }
+            @Override public void onPageSelected(    int position){
+                getSupportActionBar().setTitle(mSectionsPagerAdapter.getPageTitle(position));
+            }
+        }
+        );
     }
 
 
@@ -99,13 +109,17 @@ public class MainActivity extends ActionBarActivity implements MissionsTasksFrag
 
         @Override
         public Fragment getItem(int position) {
+            ActionBar actionBar = getSupportActionBar();
             switch(position)
             {
                 case 0:
+//                    actionBar.setTitle(R.string.title_MissionsTasks);
                     return MissionsTasksFragment.newInstance();
                 case 1:
+//                    actionBar.setTitle(R.string.title_Map);
                     return MapFragment.newInstance();
                 case 2:
+//                    actionBar.setTitle(R.string.title_Control);
                     return ControlFragment.newInstance();
             }
             return null;
@@ -114,24 +128,42 @@ public class MainActivity extends ActionBarActivity implements MissionsTasksFrag
 //            return PlaceholderFragment.newInstance(position + 1);
         }
 
+//        @Override
+        public void onPageSelected(int position)
+        {
+            ActionBar actionBar = getSupportActionBar();
+            switch(position)
+            {
+                case 0:
+                    actionBar.setTitle(R.string.title_MissionsTasks);
+                    break;
+                case 1:
+                    actionBar.setTitle(R.string.title_Map);
+                    break;
+                case 2:
+                    actionBar.setTitle(R.string.title_Control);
+                    break;
+            }
+        }
+
         @Override
         public int getCount() {
             // Show 3 total pages.
             return 3;
         }
 
-//        @Override
-//        public CharSequence getPageTitle(int position) {
-//            Locale l = Locale.getDefault();
-//            switch (position) {
-//                case 0:
-//                    return getString(R.string.title_section1).toUpperCase(l);
-//                case 1:
-//                    return getString(R.string.title_section2).toUpperCase(l);
-//                case 2:
-//                    return getString(R.string.title_section3).toUpperCase(l);
-//            }
-//            return null;
-//        }
+        @Override
+        public CharSequence getPageTitle(int position) {
+            Locale l = Locale.getDefault();
+            switch (position) {
+                case 0:
+                    return getString(R.string.title_MissionsTasks);
+                case 1:
+                    return getString(R.string.title_Map);
+                case 2:
+                    return getString(R.string.title_Control);
+            }
+            return null;
+        }
     }
 }
