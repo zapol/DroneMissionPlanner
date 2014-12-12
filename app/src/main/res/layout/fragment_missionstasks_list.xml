@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.zapol.android.dronemissionplanner.MissionsTasksFragment"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/missions"
+        android:id="@+id/missionsTxt"
+        android:layout_marginLeft="0dp"
+        android:layout_alignBaseline="@+id/newMissionBtn"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/newMission"
+        android:id="@+id/newMissionBtn"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/missions"
+        android:layout_marginLeft="0dp"
+        android:layout_below="@+id/newMissionBtn"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/tasks"
+        android:id="@+id/tasksTxt"
+        android:layout_marginLeft="0dp"
+        android:layout_alignBaseline="@+id/newTaskBtn" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/newTask"
+        android:id="@+id/newTaskBtn"
+        android:layout_below="@+id/missions"
+        android:layout_alignParentEnd="true" />
+
+    <ListView android:id="@+id/tasks" android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="0dp"
+        android:layout_below="@+id/newTaskBtn"
+        android:layout_alignParentStart="true" />
+
+
+</RelativeLayout>
