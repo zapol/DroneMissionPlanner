@@ -145,8 +145,9 @@ public class MissionsTasksFragment extends Fragment implements AbsListView.OnIte
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         public void onFragmentInteraction(String id);
+//        public void onAddMission(Mission mission);
+//        public void onAddTask(Task task);
     }
 
 }

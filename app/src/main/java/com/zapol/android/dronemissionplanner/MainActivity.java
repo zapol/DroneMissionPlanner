@@ -19,7 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.net.Uri;
 import android.widget.TextView;
-
+import android.support.v7.widget.Toolbar;
 
 public class MainActivity extends ActionBarActivity implements MissionsTasksFragment.OnFragmentInteractionListener, MapFragment.OnFragmentInteractionListener, ControlFragment.OnFragmentInteractionListener {
 
@@ -43,7 +43,6 @@ public class MainActivity extends ActionBarActivity implements MissionsTasksFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -51,17 +50,6 @@ public class MainActivity extends ActionBarActivity implements MissionsTasksFrag
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        getSupportActionBar().setTitle(mSectionsPagerAdapter.getPageTitle(0));
-        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener(){
-            @Override public void onPageScrollStateChanged(    int arg0){
-            }
-            @Override public void onPageScrolled(    int arg0,    float arg1,    int arg2){
-            }
-            @Override public void onPageSelected(    int position){
-                getSupportActionBar().setTitle(mSectionsPagerAdapter.getPageTitle(position));
-            }
-        }
-        );
     }
 
 
@@ -109,7 +97,7 @@ public class MainActivity extends ActionBarActivity implements MissionsTasksFrag
 
         @Override
         public Fragment getItem(int position) {
-            ActionBar actionBar = getSupportActionBar();
+//            ActionBar actionBar = getSupportActionBar();
             switch(position)
             {
                 case 0:
@@ -131,19 +119,19 @@ public class MainActivity extends ActionBarActivity implements MissionsTasksFrag
 //        @Override
         public void onPageSelected(int position)
         {
-            ActionBar actionBar = getSupportActionBar();
-            switch(position)
-            {
-                case 0:
-                    actionBar.setTitle(R.string.title_MissionsTasks);
-                    break;
-                case 1:
-                    actionBar.setTitle(R.string.title_Map);
-                    break;
-                case 2:
-                    actionBar.setTitle(R.string.title_Control);
-                    break;
-            }
+//            ActionBar actionBar = getSupportActionBar();
+//            switch(position)
+//            {
+//                case 0:
+//                    actionBar.setTitle(R.string.title_MissionsTasks);
+//                    break;
+//                case 1:
+//                    actionBar.setTitle(R.string.title_Map);
+//                    break;
+//                case 2:
+//                    actionBar.setTitle(R.string.title_Control);
+//                    break;
+//            }
         }
 
         @Override

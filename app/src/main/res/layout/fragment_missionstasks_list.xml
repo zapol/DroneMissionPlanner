@@ -12,24 +12,24 @@
         android:text="@string/missions"
         android:id="@+id/missionsTxt"
         android:layout_marginLeft="0dp"
-        android:layout_alignBaseline="@+id/newMissionBtn"
+        android:layout_alignBaseline="@+id/addMissionBtn"
         android:layout_alignParentStart="true" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/newMission"
-        android:id="@+id/newMissionBtn"
+        android:text="@string/add"
+        android:id="@+id/addMissionBtn"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_toStartOf="@+id/removeMissionBtn" />
 
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/missions"
         android:layout_marginLeft="0dp"
-        android:layout_below="@+id/newMissionBtn"
+        android:layout_below="@+id/addMissionBtn"
         android:layout_alignParentStart="true" />
 
     <TextView
@@ -39,22 +39,40 @@
         android:text="@string/tasks"
         android:id="@+id/tasksTxt"
         android:layout_marginLeft="0dp"
-        android:layout_alignBaseline="@+id/newTaskBtn" />
+        android:layout_alignBaseline="@+id/addTaskBtn" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/newTask"
-        android:id="@+id/newTaskBtn"
+        android:text="@string/add"
+        android:id="@+id/addTaskBtn"
         android:layout_below="@+id/missions"
-        android:layout_alignParentEnd="true" />
+        android:layout_toStartOf="@+id/removeMissionBtn" />
 
     <ListView android:id="@+id/tasks" android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="0dp"
-        android:layout_below="@+id/newTaskBtn"
+        android:layout_below="@+id/addTaskBtn"
         android:layout_alignParentStart="true" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/remove"
+        android:id="@+id/removeMissionBtn"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/remove"
+        android:id="@+id/removeTaskBtn"
+        android:layout_below="@+id/missions"
+        android:layout_alignParentEnd="true" />
 
 
 </RelativeLayout>

@@ -35,13 +35,13 @@
         android:id="@+id/spinner"
         android:layout_below="@+id/textView2"
         android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/button" />
+        android:layout_toStartOf="@+id/uploadMissionBtn" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/button"
+        android:text="@string/uploadMission"
+        android:id="@+id/uploadMissionBtn"
         android:layout_alignTop="@+id/spinner"
         android:layout_alignParentEnd="true" />
 
@@ -74,8 +74,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/button2"
+        android:text="@string/activateTask"
+        android:id="@+id/activateTaskBtn"
         android:layout_alignTop="@+id/spinner2"
         android:layout_alignParentEnd="true" />
 
