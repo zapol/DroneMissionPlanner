@@ -25,5 +25,17 @@
     <string name="stop">Stop</string>
     <string name="uploadMission">Upload Mission</string>
     <string name="activateTask">Activate Task</string>
+    <string name="taskType">Task Type:</string>
+    <string name="waypoint">Waypoint</string>
+    <string name="bearing">Bearing</string>
+    <string name="verticalTask">Vertical task</string>
+    <string name="pitch">Pitch</string>
+    <string name="power">Power</string>
+    <string name="nextTask">Next Task</string>
+    <string name="edit">Edit</string>
+    <string name="missionName">Mission Name:</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="couldNotCreateMission">Could not create mission</string>
 
 </resources>

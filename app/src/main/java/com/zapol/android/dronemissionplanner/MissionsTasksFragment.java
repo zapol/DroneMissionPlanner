@@ -1,15 +1,18 @@
 package com.zapol.android.dronemissionplanner;
 
 import android.app.Activity;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 
@@ -24,23 +27,23 @@ import com.zapol.android.dronemissionplanner.dummy.DummyContent;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class MissionsTasksFragment extends Fragment implements AbsListView.OnItemClickListener {
+public class MissionsTasksFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+//    private static final String ARG_PARAM1 = "param1";
+//    private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+//    private String mParam1;
+//    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
     /**
      * The fragment's ListView/GridView.
      */
-    private AbsListView mListView;
+//    private AbsListView mListView;
 
     /**
      * The Adapter which will be used to populate the ListView/GridView with
@@ -69,10 +72,10 @@ public class MissionsTasksFragment extends Fragment implements AbsListView.OnIte
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+//        if (getArguments() != null) {
+//            mParam1 = getArguments().getString(ARG_PARAM1);
+//            mParam2 = getArguments().getString(ARG_PARAM2);
+//        }
 
         // TODO: Change Adapter to display your content
         mAdapter = new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
@@ -84,12 +87,55 @@ public class MissionsTasksFragment extends Fragment implements AbsListView.OnIte
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_missionstasks, container, false);
 
-        // Set the adapter
-        mListView = (AbsListView) view.findViewById(R.id.tasks);
-        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+//        // Set the adapter
+//        mListView = (AbsListView) view.findViewById(R.id.tasks);
+//        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+//
+//        // Set OnItemClickListener so we can be notified on item clicks
+//        mListView.setOnItemClickListener(this);
 
-        // Set OnItemClickListener so we can be notified on item clicks
-        mListView.setOnItemClickListener(this);
+        // Add Mission callback
+        Button addMissionbt=(Button) view.findViewById(R.id.addMissionBtn);
+        addMissionbt.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mListener.onAddMission();
+                    }
+                });
+        // Remove Mission callback
+        Button removeMissionBt=(Button) view.findViewById(R.id.removeMissionBtn);
+        removeMissionBt.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        View view = getView();
+                        Spinner missionsList = (Spinner) view.findViewById(R.id.missions);
+                        mListener.onRemoveMission(missionsList.getSelectedItem());
+                    }
+                });
+        // Add Task callback
+        Button addTaskBt=(Button) view.findViewById(R.id.addTaskBtn);
+        addTaskBt.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        View view = getView();
+                        Spinner missionsList = (Spinner) view.findViewById(R.id.missions);
+                        mListener.onAddTask(missionsList.getSelectedItem());
+                    }
+                });
+        // Remove Task callback
+        Button removeTaskBt=(Button) view.findViewById(R.id.removeTaskBtn);
+        removeTaskBt.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        View view = getView();
+                        Spinner tasksList = (Spinner) view.findViewById(R.id.tasks);
+                        mListener.onRemoveTask(tasksList.getSelectedItem());
+                    }
+                });
 
         return view;
     }
@@ -112,13 +158,27 @@ public class MissionsTasksFragment extends Fragment implements AbsListView.OnIte
     }
 
 
-    @Override
+//    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (null != mListener) {
+//            switch(view)
+//            {
+//                case addMissionBtn:
+//
+//
+//            }
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+//            mListener.onAddMissionPressed();
         }
+    }
+
+    public void onAddMissionClicked(View v) {
+//        TextView txt = (TextView) getView().findViewById(R.id.missionsTxt);
+//        txt.setText("dupa");
+//        if (mListener != null) {
+//            mListener.onAddMissionPressed();
+//        }
     }
 
     /**
@@ -126,13 +186,13 @@ public class MissionsTasksFragment extends Fragment implements AbsListView.OnIte
      * the list is empty. If you would like to change the text, call this method
      * to supply the text it should use.
      */
-    public void setEmptyText(CharSequence emptyText) {
-        View emptyView = mListView.getEmptyView();
-
-        if (emptyView instanceof TextView) {
-            ((TextView) emptyView).setText(emptyText);
-        }
-    }
+//    public void setEmptyText(CharSequence emptyText) {
+//        View emptyView = mListView.getEmptyView();
+//
+//        if (emptyView instanceof TextView) {
+//            ((TextView) emptyView).setText(emptyText);
+//        }
+//    }
 
     /**
      * This interface must be implemented by activities that contain this
@@ -145,9 +205,10 @@ public class MissionsTasksFragment extends Fragment implements AbsListView.OnIte
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(String id);
-//        public void onAddMission(Mission mission);
-//        public void onAddTask(Task task);
+        public void onAddMission();
+        public void onRemoveMission(Object missionObj);
+        public int onAddTask(Object missionObj);
+        public void onRemoveTask(Object taskObj);
     }
 
 }

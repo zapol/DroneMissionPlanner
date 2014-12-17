@@ -2,26 +2,19 @@ package com.zapol.android.dronemissionplanner;
 
 import java.util.Locale;
 
-import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.net.Uri;
-import android.widget.TextView;
-import android.support.v7.widget.Toolbar;
+import android.widget.EditText;
 
-public class MainActivity extends ActionBarActivity implements MissionsTasksFragment.OnFragmentInteractionListener, MapFragment.OnFragmentInteractionListener, ControlFragment.OnFragmentInteractionListener {
+public class MainActivity extends ActionBarActivity implements MissionsTasksFragment.OnFragmentInteractionListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -75,13 +68,59 @@ public class MainActivity extends ActionBarActivity implements MissionsTasksFrag
         return super.onOptionsItemSelected(item);
     }
 
-    public void onFragmentInteraction(Uri uri)
-    {
+    @Override
+    public void onAddMission() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        alert.setMessage(R.string.missionName);
+
+        // Set an EditText view to get user input
+        final EditText input = new EditText(this);
+
+        alert.setView(input);
+        alert.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                String name = input.getText().toString();
+                addMission(name);
+            }
+        });
+
+        alert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+            }
+        });
+        alert.show();
+    }
+
+    private void addMission(String name) {
+        try {
+            Mission mission = new Mission(name);
+        }
+        catch(Exception e){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.couldNotCreateMission);
+            builder.setMessage(e.getMessage())
+                    .setNegativeButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                                                    }
+                    });
+            builder.show();
+        }
+    }
+
+    @Override
+    public void onRemoveMission(Object missionObj) {
 
     }
 
-    public void onFragmentInteraction(String id)
-    {
+    @Override
+    public int onAddTask(Object missionObj) {
+        return 0;
+    }
+
+    @Override
+    public void onRemoveTask(Object taskObj) {
 
     }
 
@@ -114,24 +153,6 @@ public class MainActivity extends ActionBarActivity implements MissionsTasksFrag
 //            // getItem is called to instantiate the fragment for the given page.
 //            // Return a PlaceholderFragment (defined as a static inner class below).
 //            return PlaceholderFragment.newInstance(position + 1);
-        }
-
-//        @Override
-        public void onPageSelected(int position)
-        {
-//            ActionBar actionBar = getSupportActionBar();
-//            switch(position)
-//            {
-//                case 0:
-//                    actionBar.setTitle(R.string.title_MissionsTasks);
-//                    break;
-//                case 1:
-//                    actionBar.setTitle(R.string.title_Map);
-//                    break;
-//                case 2:
-//                    actionBar.setTitle(R.string.title_Control);
-//                    break;
-//            }
         }
 
         @Override
