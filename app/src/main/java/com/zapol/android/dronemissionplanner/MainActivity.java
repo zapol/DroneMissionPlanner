@@ -12,9 +12,10 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
+import android.widget.CursorAdapter;
+import android.widget.SimpleCursorAdapter;
 
-public class MainActivity extends ActionBarActivity implements MissionsTasksFragment.OnFragmentInteractionListener {
+public class MainActivity extends ActionBarActivity implements MissionsTasksFragment.FragmentInterface {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -25,6 +26,8 @@ public class MainActivity extends ActionBarActivity implements MissionsTasksFrag
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     SectionsPagerAdapter mSectionsPagerAdapter;
+    private MissionCursorAdapter missionsAdapter;
+    private SimpleCursorAdapter tasksAdapter;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -41,6 +44,13 @@ public class MainActivity extends ActionBarActivity implements MissionsTasksFrag
         // primary sections of the activity.
         dbh = new DbHelper(getApplication());
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
+        String[] from = new String[] {"name"};
+        int[] to = new int[] {android.R.id.text1};
+        missionsAdapter = new MissionCursorAdapter(getApplication(), android.R.layout.simple_spinner_item, dbh.getMissions(), from, to, SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+        missionsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        tasksAdapter = new MissionCursorAdapter(getApplication(), android.R.layout.simple_spinner_item, dbh.getTasks(0), from, to, SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+        tasksAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
@@ -71,31 +81,7 @@ public class MainActivity extends ActionBarActivity implements MissionsTasksFrag
     }
 
     @Override
-    public void onAddMission() {
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
-
-        alert.setMessage(R.string.missionName);
-
-        // Set an EditText view to get user input
-        final EditText input = new EditText(this);
-
-        alert.setView(input);
-        alert.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                String name = input.getText().toString();
-                addMission(name);
-            }
-        });
-
-        alert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                // Canceled.
-            }
-        });
-        alert.show();
-    }
-
-    private void addMission(String name) {
+    public void onAddMission(String name) {
         try {
 //            Mission mission = new Mission(getApplicationContext(), name);
             if(name.isEmpty())
@@ -105,6 +91,7 @@ public class MainActivity extends ActionBarActivity implements MissionsTasksFrag
             else {
                 DbHelper db = new DbHelper(getApplicationContext());
                 db.addMission(name);
+                missionsAdapter.changeCursor(dbh.getMissions());
             }
         }
         catch(Exception e){
@@ -122,6 +109,7 @@ public class MainActivity extends ActionBarActivity implements MissionsTasksFrag
     @Override
     public void onRemoveMission(long missionId) {
         dbh.removeMission(missionId);
+        missionsAdapter.changeCursor(dbh.getMissions());
     }
 
     @Override
@@ -132,6 +120,16 @@ public class MainActivity extends ActionBarActivity implements MissionsTasksFrag
     @Override
     public void onRemoveTask(long taskId) {
 
+    }
+
+    @Override
+    public CursorAdapter getMissionAdapter() {
+        return this.missionsAdapter;
+    }
+
+    @Override
+    public CursorAdapter getTasksAdapter() {
+        return this.tasksAdapter;
     }
 
     /**

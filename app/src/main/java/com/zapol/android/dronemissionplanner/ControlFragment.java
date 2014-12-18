@@ -76,10 +76,10 @@ public class ControlFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 //        try {
-//            mListener = (OnFragmentInteractionListener) activity;
+//            mListener = (FragmentInterface) activity;
 //        } catch (ClassCastException e) {
 //            throw new ClassCastException(activity.toString()
-//                    + " must implement OnFragmentInteractionListener");
+//                    + " must implement FragmentInterface");
 //        }
     }
 

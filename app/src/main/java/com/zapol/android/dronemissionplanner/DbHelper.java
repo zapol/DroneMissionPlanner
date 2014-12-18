@@ -74,7 +74,6 @@ public class DbHelper extends SQLiteOpenHelper {
         else {
             ContentValues cv = new ContentValues();
             cv.put("name",name);
-            long missionId = db.insert("missions", null, cv);
             return db.insert("missions", null, cv);
         }
     }
@@ -107,6 +106,12 @@ public class DbHelper extends SQLiteOpenHelper {
     {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT id AS _id, name FROM missions ORDER BY name ASC", null);
+    }
+
+    public Cursor getTasks(long missionId)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT id AS _id, name FROM tasks WHERE mission="+missionId+" ORDER BY name ASC", null);
     }
 
     public void removeMission(long missionId) {

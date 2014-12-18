@@ -1,25 +1,17 @@
 package com.zapol.android.dronemissionplanner;
 
 import android.app.Activity;
-import android.database.Cursor;
-import android.net.Uri;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CursorAdapter;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
-
-
-import com.zapol.android.dronemissionplanner.dummy.DummyContent;
 
 /**
  * A fragment representing a list of Items.
@@ -27,7 +19,7 @@ import com.zapol.android.dronemissionplanner.dummy.DummyContent;
  * Large screen devices (such as tablets) are supported by replacing the ListView
  * with a GridView.
  * <p/>
- * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
+ * Activities containing this fragment MUST implement the {@link com.zapol.android.dronemissionplanner.MissionsTasksFragment.FragmentInterface}
  * interface.
  */
 public class MissionsTasksFragment extends Fragment {
@@ -41,7 +33,7 @@ public class MissionsTasksFragment extends Fragment {
 //    private String mParam1;
 //    private String mParam2;
 
-    private OnFragmentInteractionListener mListener;
+    private FragmentInterface fInterface;
 
     /**
      * The fragment's ListView/GridView.
@@ -52,9 +44,7 @@ public class MissionsTasksFragment extends Fragment {
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
      */
-    private MissionCursorAdapter missionsAdapter;
-    private DbHelper dbh;
-    private SimpleCursorAdapter tasksAdapter;
+    private CursorAdapter missionsAdapter,tasksAdapter;
 
     // TODO: Rename and change types of parameters
     public static MissionsTasksFragment newInstance() {
@@ -76,12 +66,11 @@ public class MissionsTasksFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 //        if (getArguments() != null) {
 //            mParam1 = getArguments().getString(ARG_PARAM1);
 //            mParam2 = getArguments().getString(ARG_PARAM2);
 //        }
-        dbh = new DbHelper(getActivity().getApplication());
+//        dbh = new DbHelper(getActivity().getApplication());
 //        DbHelper db = new DbHelper(getActivity());
 //        String[] from = new String[] {"name"};
 //        int[] to = new int[] {android.R.id.text1};
@@ -98,12 +87,8 @@ public class MissionsTasksFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_missionstasks, container, false);
 
-//        // Set the adapter
-//        mListView = (AbsListView) view.findViewById(R.id.tasks);
-//        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
-//
-//        // Set OnItemClickListener so we can be notified on item clicks
-//        mListView.setOnItemClickListener(this);
+        this.missionsAdapter = fInterface.getMissionAdapter();
+        this.tasksAdapter = fInterface.getTasksAdapter();
 
         // Add Mission callback
         Button addMissionbt=(Button) view.findViewById(R.id.addMissionBtn);
@@ -111,9 +96,27 @@ public class MissionsTasksFragment extends Fragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mListener.onAddMission();
-                        missionsAdapter.changeCursor(dbh.getMissions());
-                        missionsAdapter.notifyDataSetChanged();
+                        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+
+                        alert.setMessage(R.string.missionName);
+
+                        // Set an EditText view to get user input
+                        final EditText input = new EditText(getActivity());
+
+                        alert.setView(input);
+                        alert.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                String name = input.getText().toString();
+                                fInterface.onAddMission(name);
+                            }
+                        });
+
+                        alert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                // Canceled.
+                            }
+                        });
+                        alert.show();
                     }
                 });
         // Remove Mission callback
@@ -124,9 +127,7 @@ public class MissionsTasksFragment extends Fragment {
                     public void onClick(View v) {
                         View view = getView();
                         Spinner missionsList = (Spinner) view.findViewById(R.id.missions);
-                        mListener.onRemoveMission(missionsList.getSelectedItemId());
-                        missionsAdapter.changeCursor(dbh.getMissions());
-                        missionsAdapter.notifyDataSetChanged();
+                        fInterface.onRemoveMission(missionsList.getSelectedItemId());
                     }
                 });
         // Add Task callback
@@ -137,7 +138,7 @@ public class MissionsTasksFragment extends Fragment {
                     public void onClick(View v) {
                         View view = getView();
                         Spinner missionsList = (Spinner) view.findViewById(R.id.missions);
-                        mListener.onAddTask(missionsList.getSelectedItemId());
+                        fInterface.onAddTask(missionsList.getSelectedItemId());
                     }
                 });
         // Remove Task callback
@@ -148,18 +149,15 @@ public class MissionsTasksFragment extends Fragment {
                     public void onClick(View v) {
                         View view = getView();
                         Spinner tasksList = (Spinner) view.findViewById(R.id.tasks);
-                        mListener.onRemoveTask(tasksList.getSelectedItemId());
+                        fInterface.onRemoveTask(tasksList.getSelectedItemId());
                     }
                 });
 
-        DbHelper db = new DbHelper(getActivity().getApplication());
-        String[] from = new String[] {"name"};
-        int[] to = new int[] {android.R.id.text1};
-
-        missionsAdapter = new MissionCursorAdapter(getActivity().getApplication(), android.R.layout.simple_spinner_item, dbh.getMissions(), from, to, SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
-        missionsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        Spinner spin = (Spinner) view.findViewById(R.id.missions);
-        spin.setAdapter(missionsAdapter);
+        Spinner missionSpin = (Spinner) view.findViewById(R.id.missions);
+        missionSpin.setAdapter(missionsAdapter);
+        Spinner tasksSpin = (Spinner) view.findViewById(R.id.tasks);
+        tasksSpin.setAdapter(tasksAdapter);
+//        spin.setAdapter(tasksAdapter);
 
 
         return view;
@@ -169,17 +167,17 @@ public class MissionsTasksFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnFragmentInteractionListener) activity;
+            fInterface = (FragmentInterface) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement FragmentInterface");
         }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        fInterface = null;
     }
 
     /**
@@ -192,11 +190,13 @@ public class MissionsTasksFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
-        public void onAddMission();
+    public interface FragmentInterface {
+        public void onAddMission(String name);
         public void onRemoveMission(long missionId);
         public long onAddTask(long missionId);
         public void onRemoveTask(long taskId);
+        public CursorAdapter getMissionAdapter();
+        public CursorAdapter getTasksAdapter();
     }
 
 }

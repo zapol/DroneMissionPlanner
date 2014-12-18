@@ -12,13 +12,16 @@ import android.widget.SimpleCursorAdapter;
  */
 public class MissionCursorAdapter extends SimpleCursorAdapter {
 
+    private DbHelper dbh;
     public MissionCursorAdapter(Context context, int layout, Cursor c, String[] from, int[] to, int flags) {
         super(context, layout, c, from, to, flags);
+        dbh = new DbHelper(context);
     }
 
     @Override
     protected void onContentChanged() {
         super.onContentChanged();
-        notifyDataSetChanged();
+        this.changeCursor(dbh.getMissions());
+//        notifyDataSetChanged();
     }
 }
