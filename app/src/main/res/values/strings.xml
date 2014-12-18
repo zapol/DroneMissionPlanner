@@ -37,5 +37,8 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="couldNotCreateMission">Could not create mission</string>
+    <string name="missionNameEmpty">Please provide some name for the mission</string>
+    <string name="missionNameExists">Mission with given name already exists</string>
+    <string name="taskNameExists">Task with given name already exists</string>
 
 </resources>

@@ -30,6 +30,7 @@ public class MainActivity extends ActionBarActivity implements MissionsTasksFrag
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
+    DbHelper dbh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,7 @@ public class MainActivity extends ActionBarActivity implements MissionsTasksFrag
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
+        dbh = new DbHelper(getApplication());
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
@@ -95,7 +97,15 @@ public class MainActivity extends ActionBarActivity implements MissionsTasksFrag
 
     private void addMission(String name) {
         try {
-            Mission mission = new Mission(name);
+//            Mission mission = new Mission(getApplicationContext(), name);
+            if(name.isEmpty())
+            {
+                throw new Exception(getResources().getText(R.string.missionNameEmpty).toString());
+            }
+            else {
+                DbHelper db = new DbHelper(getApplicationContext());
+                db.addMission(name);
+            }
         }
         catch(Exception e){
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -103,24 +113,24 @@ public class MainActivity extends ActionBarActivity implements MissionsTasksFrag
             builder.setMessage(e.getMessage())
                     .setNegativeButton(R.string.ok, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                                                    }
+                        }
                     });
             builder.show();
         }
     }
 
     @Override
-    public void onRemoveMission(Object missionObj) {
-
+    public void onRemoveMission(long missionId) {
+        dbh.removeMission(missionId);
     }
 
     @Override
-    public int onAddTask(Object missionObj) {
+    public long onAddTask(long missionId) {
         return 0;
     }
 
     @Override
-    public void onRemoveTask(Object taskObj) {
+    public void onRemoveTask(long taskId) {
 
     }
 
