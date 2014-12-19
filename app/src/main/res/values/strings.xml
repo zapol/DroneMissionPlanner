@@ -40,5 +40,7 @@
     <string name="missionNameEmpty">Please provide some name for the mission</string>
     <string name="missionNameExists">Mission with given name already exists</string>
     <string name="taskNameExists">Task with given name already exists</string>
+    <string name="sureDeleteMissionsQuestion">Are you sure you want to delete mission \"%1$s\" along with its %2$d tasks?</string>
+    <string name="sureDeleteTaskQuestion">Are you sure you want to remove task \"%1$s\"</string>
 
 </resources>

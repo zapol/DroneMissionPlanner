@@ -117,6 +117,38 @@ public class DbHelper extends SQLiteOpenHelper {
     public void removeMission(long missionId) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete("missions","id="+missionId,null);
-//        db.rawQuery("DELETE FROM missions WHERE id="+missionId, null);
+    }
+
+    public String getMissionName(long missionId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT name FROM missions WHERE id="+missionId, null);
+        return c.getString(0);
+    }
+
+    public Cursor getWaypoints() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT id AS _id, name FROM waypoints ORDER BY name ASC", null);
+    }
+
+    public Cursor getTriggers() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT id AS _id, name FROM triggers ORDER BY name ASC", null);
+    }
+
+    public String getTaskName(long taskId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT name FROM tasks WHERE id="+taskId, null);
+        return c.getString(0);
+    }
+
+    public long getMissionFromTask(long taskId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT mission FROM tasks WHERE task="+taskId, null);
+        return c.getInt(0);
+    }
+
+    public void removeTask(long taskId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("tasks","id="+taskId,null);
     }
 }

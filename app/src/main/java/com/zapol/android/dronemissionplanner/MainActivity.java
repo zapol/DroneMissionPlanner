@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -26,8 +27,7 @@ public class MainActivity extends ActionBarActivity implements MissionsTasksFrag
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     SectionsPagerAdapter mSectionsPagerAdapter;
-    private MissionCursorAdapter missionsAdapter;
-    private SimpleCursorAdapter tasksAdapter;
+    private SimpleCursorAdapter tasksAdapter, missionsAdapter, waypointsAdapter, triggersAdapter;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -47,10 +47,14 @@ public class MainActivity extends ActionBarActivity implements MissionsTasksFrag
 
         String[] from = new String[] {"name"};
         int[] to = new int[] {android.R.id.text1};
-        missionsAdapter = new MissionCursorAdapter(getApplication(), android.R.layout.simple_spinner_item, dbh.getMissions(), from, to, SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+        missionsAdapter = new SimpleCursorAdapter(getApplication(), android.R.layout.simple_spinner_item, dbh.getMissions(), from, to, SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
         missionsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        tasksAdapter = new MissionCursorAdapter(getApplication(), android.R.layout.simple_spinner_item, dbh.getTasks(0), from, to, SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+        tasksAdapter = new SimpleCursorAdapter(getApplication(), android.R.layout.simple_spinner_item, dbh.getTasks(0), from, to, SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
         tasksAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        waypointsAdapter = new SimpleCursorAdapter(getApplication(), android.R.layout.simple_spinner_item, dbh.getWaypoints(), from, to, SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+        waypointsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        triggersAdapter = new SimpleCursorAdapter(getApplication(), android.R.layout.simple_spinner_item, dbh.getTriggers(), from, to, SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+        triggersAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
@@ -107,9 +111,32 @@ public class MainActivity extends ActionBarActivity implements MissionsTasksFrag
     }
 
     @Override
-    public void onRemoveMission(long missionId) {
-        dbh.removeMission(missionId);
-        missionsAdapter.changeCursor(dbh.getMissions());
+    public void onRemoveMission(final long missionId) {
+        Cursor c = dbh.getTasks(missionId);
+        if(c.getCount()>0)
+        {
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            String msg = String.format(getResources().getString(R.string.sureDeleteMissionsQuestion),dbh.getMissionName(missionId), c.getCount());
+            alert.setMessage(msg);
+
+            alert.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    dbh.removeMission(missionId);
+                    missionsAdapter.changeCursor(dbh.getMissions());
+                }
+            });
+
+            alert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    // Canceled.
+                }
+            });
+            alert.show();
+        }
+        else {
+            dbh.removeMission(missionId);
+            missionsAdapter.changeCursor(dbh.getMissions());
+        }
     }
 
     @Override
@@ -118,18 +145,46 @@ public class MainActivity extends ActionBarActivity implements MissionsTasksFrag
     }
 
     @Override
-    public void onRemoveTask(long taskId) {
+    public void onRemoveTask(final long taskId) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        String msg = String.format(getResources().getString(R.string.sureDeleteTaskQuestion),dbh.getTaskName(taskId));
+        final long missionId = dbh.getMissionFromTask(taskId);
+        alert.setMessage(msg);
+
+        alert.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dbh.removeTask(taskId);
+                tasksAdapter.changeCursor(dbh.getTasks(missionId));
+            }
+        });
+
+        alert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+            }
+        });
+        alert.show();
 
     }
 
     @Override
-    public CursorAdapter getMissionAdapter() {
+    public CursorAdapter getMissionsAdapter() {
         return this.missionsAdapter;
     }
 
     @Override
     public CursorAdapter getTasksAdapter() {
         return this.tasksAdapter;
+    }
+
+    @Override
+    public CursorAdapter getWaypointsAdapter() {
+        return this.waypointsAdapter;
+    }
+
+    @Override
+    public CursorAdapter getTriggersAdapter() {
+        return this.triggersAdapter;
     }
 
     /**

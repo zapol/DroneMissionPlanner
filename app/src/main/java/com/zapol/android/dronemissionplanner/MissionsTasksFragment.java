@@ -87,7 +87,7 @@ public class MissionsTasksFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_missionstasks, container, false);
 
-        this.missionsAdapter = fInterface.getMissionAdapter();
+        this.missionsAdapter = fInterface.getMissionsAdapter();
         this.tasksAdapter = fInterface.getTasksAdapter();
 
         // Add Mission callback
@@ -195,8 +195,10 @@ public class MissionsTasksFragment extends Fragment {
         public void onRemoveMission(long missionId);
         public long onAddTask(long missionId);
         public void onRemoveTask(long taskId);
-        public CursorAdapter getMissionAdapter();
+        public CursorAdapter getMissionsAdapter();
         public CursorAdapter getTasksAdapter();
+        public CursorAdapter getWaypointsAdapter();
+        public CursorAdapter getTriggersAdapter();
     }
 
 }
